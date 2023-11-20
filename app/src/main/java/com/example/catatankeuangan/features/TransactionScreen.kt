@@ -2,6 +2,7 @@ package com.example.catatankeuangan.features
 
 import android.view.SurfaceControl.Transaction
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,7 +14,7 @@ import java.util.UUID
 @Composable
 fun TransactionScreen() {
     // Mendapatkan instance ViewModel
-    val viewModel:  TransactionViewModel = ViewModel()
+    val viewModel:  TransactionViewModel
 
     // Membuat State untuk menyimpan deskripsi dan jumlah transaksi baru
     var description: String by rememberSaveable { mutableStateOf("") }
