@@ -17,10 +17,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.catatankeuangan.features.ProfileScreen
+import com.example.catatankeuangan.features.TransactionScreen
 import com.example.catatankeuangan.ui.BottomMenu
+import com.example.catatankeuangan.ui.HomeScreen
 import com.example.catatankeuangan.ui.theme.CatatanKeuanganTheme
 import com.example.catatankeuangan.ui.theme.DeepBlue
-import com.example.catatankeuangan.ui.HomeScreen
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("SuspiciousIndentation")
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
                     ) {
 //                    val navController = rememberNavController()
                         ScreenMain(navController = navController)
+//                        if
                         BottomMenu(
                             items = listOf(
                                 BottomMenuContent("Home", R.drawable.ic_home, "home"),
@@ -87,6 +89,12 @@ fun ScreenMain(navController: NavHostController) {
                 //Lay down the Home Composable and pass the navController
                 ProfileScreen()
             }
+
+        composable("add") {
+
+            //Lay down the Home Composable and pass the navController
+            TransactionScreen()
+        }
 
         }
 

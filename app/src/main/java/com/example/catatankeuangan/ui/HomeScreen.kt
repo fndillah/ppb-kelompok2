@@ -42,9 +42,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.catatankeuangan.BottomMenuContent
 import com.example.catatankeuangan.Course
 import com.example.catatankeuangan.R
+import com.example.catatankeuangan.features.TransactionScreen
 import com.example.catatankeuangan.standardQuadFromTo
 import com.example.catatankeuangan.ui.theme.AquaBlue
 import com.example.catatankeuangan.ui.theme.ButtonGreen
@@ -65,6 +67,7 @@ fun HomeScreen() {
     ) {
         Column {
             GreetingSection()
+            TransactionScreen()
             ChipSection(chips = listOf("Food", "Healthy", "Entertainment", "Collage"))
             suggestionSection()
 
@@ -152,7 +155,8 @@ fun BottomMenuItem(
 
 @Composable
 fun GreetingSection(
-    name: String = "Hehe"
+    name: String = "Hehe",
+    navController: NavHostController = rememberNavController()
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -177,7 +181,10 @@ fun GreetingSection(
             painter = painterResource(id = R.drawable.ic_add),
             contentDescription = "Search",
             tint = Color.White,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier
+                .size(24.dp)
+                .clickable { navController.navigate("add") }
+
         )
     }
 }

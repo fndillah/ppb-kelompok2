@@ -7,18 +7,17 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.catatankeuangan.features.Text as FeaturesText
-import org.w3c.dom.Text as Text1
 
 // InputForm.kt
 
-interface Text {
-    fun printText()
-}
+//interface Text {
+//    fun printText()
+//}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +39,9 @@ fun InputForm(
         OutlinedTextField (
             value = description,
             onValueChange = { onDescriptionChange(it) },
-            label = { FeaturesText ("Description") },
+            label = {
+//                FeaturesText ("Description")
+                    },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -50,7 +51,9 @@ fun InputForm(
         OutlinedTextField(
             value = amount,
             onValueChange = { onAmountChange(it) },
-            label = { Text1("Amount") },
+            label = {
+//                Text1("Amount")
+                    },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
@@ -64,7 +67,7 @@ fun InputForm(
             onClick = { onAddTransaction() },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text1("Add Transaction")
+            Text("Add Transaction")
         }
     }
 }
