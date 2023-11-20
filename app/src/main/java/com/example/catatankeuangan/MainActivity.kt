@@ -1,6 +1,7 @@
 package com.example.catatankeuangan
 
 //import androidx.compose.runtime.Composable
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import com.example.catatankeuangan.ui.theme.DeepBlue
 import com.example.catatankeuangan.ui.HomeScreen
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("SuspiciousIndentation")
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
