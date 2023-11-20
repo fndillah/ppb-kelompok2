@@ -10,11 +10,12 @@ class TransactionViewModel : ViewModel() {
     private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
     val transactions: StateFlow<List<Transaction>> get() = _transactions
 
-    private val _totalBalance = MutableStateFlow(0.0)
-    val totalBalance: StateFlow<Double> get() = _totalBalance
+    private val _totalBalance = MutableStateFlow(0)
+    val totalBalance: StateFlow<Int> get() = _totalBalance
 
     fun addTransaction(transaction: Transaction) {
         _transactions.value = _transactions.value + transaction
+        println("berhasil tambah")
         recalculateBalance()
     }
 
@@ -31,6 +32,7 @@ class TransactionViewModel : ViewModel() {
     }
 
     private fun recalculateBalance() {
-        _totalBalance.value = _transactions.value.sumByDouble { it.amount }
+        _totalBalance.value = _transactions.value.sumOf { it.amount }
+        println(_totalBalance.value )
     }
 }

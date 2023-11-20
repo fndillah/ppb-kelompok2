@@ -1,5 +1,7 @@
 package com.example.catatankeuangan.features
 
+import android.R
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,10 +10,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.catatankeuangan.ui.theme.TextWhite
 
 // InputForm.kt
 
@@ -40,7 +45,7 @@ fun InputForm(
             value = description,
             onValueChange = { onDescriptionChange(it) },
             label = {
-//                FeaturesText ("Description")
+                Text("Description", color = TextWhite)
                     },
             modifier = Modifier
                 .fillMaxWidth()
@@ -52,14 +57,16 @@ fun InputForm(
             value = amount,
             onValueChange = { onAmountChange(it) },
             label = {
-//                Text1("Amount")
+                Text("Amount", color = TextWhite)
                     },
+//            colors = TextFieldColors,
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
+//                .background()
         )
 
         // Tombol tambah transaksi

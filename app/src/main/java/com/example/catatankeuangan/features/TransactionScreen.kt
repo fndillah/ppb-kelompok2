@@ -7,12 +7,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.UUID
 
 @Composable
 @Preview
 fun TransactionScreen() {
     // Mendapatkan instance ViewModel
-    val viewModel:  TransactionViewModel
+    val viewModel:  TransactionViewModel = viewModel(
+        viewModelStoreOwner = LocalViewModelStoreOwner.current!!,
+        key = null, // You can provide a key if needed
+        factory = null, // Use the default factory or provide a custom one if needed
+//        extras = viewModelExtrasOf() // Use the default extras
+    )
 
     // Membuat State untuk menyimpan deskripsi dan jumlah transaksi baru
     var description: String by rememberSaveable { mutableStateOf("") }
@@ -27,8 +36,10 @@ fun TransactionScreen() {
         onAddTransaction = {
             // Validasi dan tambahkan transaksi
             if (description.isNotEmpty() && amount.isNotEmpty()) {
-//                Transaction (UUID.randomUUID().toString(), description, amount.toDouble())
-//                viewModel.addTransaction(transaction)
+                val transaction = Transaction (UUID.randomUUID().toString(), description, amount.toInt())
+                viewModel.addTransaction(transaction)
+
+                println(transaction)
                 // Mengosongkan input setelah transaksi ditambahkan
                 description = ""
                 amount = ""
