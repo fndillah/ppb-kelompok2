@@ -23,6 +23,7 @@ import com.example.catatankeuangan.ui.HomeScreen
 import com.example.catatankeuangan.ui.theme.CatatanKeuanganTheme
 import com.example.catatankeuangan.ui.theme.DeepBlue
 
+
 class MainActivity : ComponentActivity() {
     @SuppressLint("SuspiciousIndentation")
     @ExperimentalFoundationApi
@@ -43,13 +44,17 @@ class MainActivity : ComponentActivity() {
                     ) {
 //                    val navController = rememberNavController()
                         ScreenMain(navController = navController)
+
+                        val callList =
+
+
 //                        if
                         BottomMenu(
                             items = listOf(
                                 BottomMenuContent("Home", R.drawable.ic_home, "home"),
-                                BottomMenuContent("explore", R.drawable.ic_baseline_explore_24, "explore"),
-                                BottomMenuContent("dark mode", R.drawable.ic_moon, "dark"),
-                                BottomMenuContent("videos", R.drawable.ic_videocam, "videos"),
+//                                BottomMenuContent("explore", R.drawable.ic_baseline_explore_24, "explore"),
+//                                BottomMenuContent("dark mode", R.drawable.ic_moon, "dark"),
+//                                BottomMenuContent("videos", R.drawable.ic_videocam, "videos"),
                                 BottomMenuContent("Profile", R.drawable.ic_profile, "profile"),
                             ), modifier = Modifier.align(Alignment.BottomCenter),
                             navController = navController

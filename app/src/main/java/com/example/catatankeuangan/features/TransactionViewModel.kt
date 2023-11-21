@@ -17,6 +17,10 @@ class TransactionViewModel : ViewModel() {
         _transactions.value = _transactions.value + transaction
         println("berhasil tambah")
         recalculateBalance()
+        _transactions.value.map { v -> {
+            println(v);
+        }
+        }
     }
 
     fun editTransaction(updatedTransaction: Transaction) {
@@ -29,6 +33,10 @@ class TransactionViewModel : ViewModel() {
     fun deleteTransaction(transactionId: String) {
         _transactions.value = _transactions.value.filter { it.id != transactionId }
         recalculateBalance()
+    }
+
+    fun getAllTransactions(): List<Transaction> {
+        return _transactions.value;
     }
 
     private fun recalculateBalance() {
