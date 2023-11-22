@@ -32,6 +32,7 @@ fun InputForm(
     onDescriptionChange: (String) -> Unit,
     amount: String,
     onAmountChange: (String) -> Unit,
+    is_edit: Boolean,
     onAddTransaction: () -> Unit
 ) {
     // Menerapkan UI untuk formulir input di sini
@@ -60,7 +61,14 @@ fun InputForm(
         // Input jumlah
         OutlinedTextField(
             value = amount,
-            onValueChange = { onAmountChange(it) },
+            onValueChange = {
+//            if (it.matches(Regex("[0-9]*]"))) {
+
+                onAmountChange(it)
+//            } else {
+//
+//            }
+                 },
             label = {
                 Text("Amount", color = TextWhite)
                     },
@@ -84,7 +92,7 @@ fun InputForm(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(DarkerButtonGreen)
         ) {
-            Text("Add Transaction")
+            Text(if (is_edit) "Edit" else "Add" + " Transaction")
         }
     }
 }

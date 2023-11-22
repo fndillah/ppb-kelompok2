@@ -1,5 +1,4 @@
-package com.example.catatankeuangan
-//package com.cuid.geekscourses
+package com.example.catatankeuangan.data
 
 import androidx.annotation.DrawableRes
 

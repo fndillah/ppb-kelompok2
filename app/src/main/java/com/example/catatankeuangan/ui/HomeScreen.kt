@@ -2,7 +2,7 @@ package com.example.catatankeuangan.ui
 
 //import androidx.compose.foundation.lazy.GridCells
 //import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.Canvas
+//import androidx.fragment.app.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,20 +33,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.catatankeuangan.BottomMenuContent
-import com.example.catatankeuangan.Course
-import com.example.catatankeuangan.R
+import com.example.catatankeuangan.data.BottomMenuContent
+import com.example.catatankeuangan.data.Transaction
 import com.example.catatankeuangan.features.TransactionScreen
-import com.example.catatankeuangan.standardQuadFromTo
 import com.example.catatankeuangan.ui.theme.AquaBlue
 import com.example.catatankeuangan.ui.theme.ButtonGreen
 import com.example.catatankeuangan.ui.theme.DarkerButtonGreen
@@ -59,6 +54,7 @@ import com.example.catatankeuangan.ui.theme.TextWhite
 //@Preview(widthDp = 700, heightDp = 1400)
 @Composable
 fun HomeScreen() {
+//    val viewModel: TransactionViewModel = viewModel()
     // this is the most outer box having all the views inside it
     Box(
         modifier = Modifier
@@ -68,8 +64,7 @@ fun HomeScreen() {
         Column {
             GreetingSection()
             TransactionScreen()
-            ChipSection(chips = listOf("Food", "Healthy", "Entertainment", "Collage"))
-            suggestionSection()
+
 
         }
 
@@ -155,7 +150,7 @@ fun BottomMenuItem(
 
 @Composable
 fun GreetingSection(
-    name: String = "Hehe",
+    name: String = ", Kel 2",
     navController: NavHostController = rememberNavController()
 ) {
     Row(
@@ -169,23 +164,14 @@ fun GreetingSection(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Good morning, $name",
+                text = "Manage Expense $name",
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(
-                text = "We wish you have a good day!",
+                text = "It's time to manage your money",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-        Icon(
-            painter = painterResource(id = R.drawable.ic_add),
-            contentDescription = "Search",
-            tint = Color.White,
-            modifier = Modifier
-                .size(24.dp)
-                .clickable { navController.navigate("add") }
-
-        )
     }
 }
 
@@ -220,11 +206,12 @@ fun ChipSection(
 
 @Composable
 fun suggestionSection(
+    totalBalance: Long,
     color: Color = LightRed
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(15.dp)
             .clip(RoundedCornerShape(10.dp))
@@ -232,149 +219,119 @@ fun suggestionSection(
             .padding(horizontal = 15.dp, vertical = 20.dp)
             .fillMaxWidth()
     ) {
-        Column {
-            Text(
-                text = "Latest Transaction",
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Text(
-                text = "click to see",
-                style = MaterialTheme.typography.bodyMedium,
-                color = TextWhite
-            )
-        }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(ButtonGreen)
-                .padding(10.dp)
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
+            Text(
+                text = "Rp. $totalBalance",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = if (totalBalance > 100000) "how wasteful you are" else "cool management",
+                style = MaterialTheme.typography.bodySmall,
+                color = TextWhite
             )
         }
     }
 }
 
+interface TransactionActions {
+    fun onDelete(transactionId: String)
+    fun onEdit(transaction: Transaction)
+}
+
 @ExperimentalFoundationApi
 @Composable
-fun CourseSection(courses: List<Course>) {
+fun CourseSection(transcs: List<Transaction>, transactionActions: TransactionActions) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "courses",
+            text = "Latest Transaction",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(15.dp)
         )
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(1),
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp,bottom = 100.dp),
             modifier = Modifier.fillMaxHeight()
         ) {
-            items(courses.size) {
-                CourseItem(course = courses[it])
+            items(transcs.size) {
+                TransactionItem(transc = transcs[it], transactionActions = transactionActions)
             }
         }
     }
 }
 
 @Composable
-fun CourseItem(
-    course: Course
+fun TransactionItem(
+    transc: Transaction,
+    transactionActions: TransactionActions
 ) {
     BoxWithConstraints(
         modifier = Modifier
             .padding(7.5.dp)
-            .aspectRatio(1f)
+            .aspectRatio(5f)
             .clip(RoundedCornerShape(10.dp))
-            .background(course.darkColor)
+            .background(ButtonGreen)
     ) {
-        val width = constraints.maxWidth
-        val height = constraints.maxHeight
 
-        // Medium colored path
-        val mediumColoredPoint1 = Offset(0f, height * 0.3f)
-        val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
-        val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
-        val mediumColoredPoint5 = Offset(width * 1.4f, -height.toFloat())
-
-        val mediumColoredPath = Path().apply {
-            moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
-            standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
-            standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
-            standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
-            standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
-            lineTo(width.toFloat() + 100f, height.toFloat() + 100f)
-            lineTo(-100f, height.toFloat() + 100f)
-            close()
-        }
-
-        // Light colored path
-        val lightPoint1 = Offset(0f, height * 0.35f)
-        val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
-        val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
-        val lightPoint4 = Offset(width * 0.65f, height.toFloat())
-        val lightPoint5 = Offset(width * 1.4f, -height.toFloat() / 3f)
-
-        val lightColoredPath = Path().apply {
-            moveTo(lightPoint1.x, lightPoint1.y)
-            standardQuadFromTo(lightPoint1, lightPoint2)
-            standardQuadFromTo(lightPoint2, lightPoint3)
-            standardQuadFromTo(lightPoint3, lightPoint4)
-            standardQuadFromTo(lightPoint4, lightPoint5)
-            lineTo(width.toFloat() + 100f, height.toFloat() + 100f)
-            lineTo(-100f, height.toFloat() + 100f)
-            close()
-        }
-        Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            drawPath(
-                path = mediumColoredPath,
-                color = course.mediumColor
-            )
-            drawPath(
-                path = lightColoredPath,
-                color = course.lightColor
-            )
-        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(15.dp)
         ) {
+        Column(
+            modifier = Modifier.align(Alignment.TopStart)
+        ) {
             Text(
-                text = course.title,
+                text = transc.description ,
                 style = MaterialTheme.typography.headlineSmall,
                 lineHeight = 26.sp,
-                modifier = Modifier.align(Alignment.TopStart)
-            )
-            Icon(
-                painter = painterResource(id = course.iconId),
-                contentDescription = course.title,
-                tint = Color.White,
-                modifier = Modifier.align(Alignment.BottomStart)
+
             )
             Text(
-                text = "Start",
-                color = TextWhite,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clickable {
-                        // Handle the click
-                    }
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(ButtonGreen)
-                    .padding(vertical = 6.dp, horizontal = 15.dp)
+                text = "Rp "+ transc.amount.toString() ,
+                style = MaterialTheme.typography.headlineSmall,
+                lineHeight = 26.sp,
+
             )
+        }
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(all = 1.dp)
+            ) {
+                Text(
+                    text = "Edit",
+                    color = TextWhite,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clickable {
+                            transactionActions.onEdit(transc)
+                        }
+                        //                        .align(Alignment.BottomEnd)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(LightRed)
+                        .padding(vertical = 6.dp, horizontal = 15.dp)
+                )
+
+                Text(
+                    text = "Delete",
+                    color = TextWhite,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clickable {
+                            transactionActions.onDelete(transc.id)
+                        }
+                        //                        .align(Alignment.BottomEnd)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(ButtonGreen)
+                        .padding(vertical = 6.dp, horizontal = 15.dp)
+                )
+            }
         }
     }
 }
+

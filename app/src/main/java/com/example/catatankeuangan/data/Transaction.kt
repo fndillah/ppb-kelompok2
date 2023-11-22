@@ -1,7 +1,7 @@
-package com.example.catatankeuangan.features
+package com.example.catatankeuangan.data
 
 data class Transaction(
     val id: String,
     val description: String,
-    val amount: Int
+    val amount: Long
 )

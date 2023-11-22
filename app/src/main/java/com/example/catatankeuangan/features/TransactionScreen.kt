@@ -1,57 +1,90 @@
 package com.example.catatankeuangan.features
 
+//import androidx.lifecycle.viewmodel.compose.viewModels
+//import androidx.fragment.app.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.catatankeuangan.data.Transaction
+import com.example.catatankeuangan.ui.CourseSection
+import com.example.catatankeuangan.ui.TransactionActions
+import com.example.catatankeuangan.ui.suggestionSection
 import java.util.UUID
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-@Preview
+//@Preview
 fun TransactionScreen() {
-    // Mendapatkan instance ViewModel
-    val viewModel:  TransactionViewModel = viewModel(
-        viewModelStoreOwner = LocalViewModelStoreOwner.current!!,
-        key = null, // You can provide a key if needed
-        factory = null, // Use the default factory or provide a custom one if needed
-//        extras = viewModelExtrasOf() // Use the default extras
-    )
+
+    val viewModel: TransactionViewModel = viewModel()
 
     // Membuat State untuk menyimpan deskripsi dan jumlah transaksi baru
     var description: String by rememberSaveable { mutableStateOf("") }
+    var id: String by rememberSaveable { mutableStateOf("") }
     var amount: String by rememberSaveable { mutableStateOf("") }
 
+    var is_edit: Boolean by rememberSaveable { mutableStateOf(false) }
+
+
+    var refreshTrigger by remember { mutableStateOf(1) }
+
+//    var dataList by remember { mutableStateOf(viewModel.transactions) }
+
+    suggestionSection(viewModel.totalBalance.collectAsState().value)
     // Membuat Composable untuk menampilkan formulir input
     InputForm(
         description = description,
         onDescriptionChange = { description = it },
         amount = amount,
         onAmountChange = { amount = it },
-        onAddTransaction = {
-            // Validasi dan tambahkan transaksi
-            if (description.isNotEmpty() && amount.isNotEmpty()) {
-                val transaction = Transaction (UUID.randomUUID().toString(), description, amount.toInt())
-                viewModel.addTransaction(transaction)
+        is_edit = is_edit
+    ) {
+        // Validasi dan tambahkan transaksi
+        if (description.isNotEmpty() && amount.isNotEmpty() && is_edit) {
+            val transaction = Transaction(id,description,amount.toLong())
+            viewModel.editTransaction(transaction)
+            println("$id edited")
+            is_edit = !is_edit
+            description = ""
+            amount = ""
+        } else if (description.isNotEmpty() && amount.isNotEmpty()) {
+            val transaction = Transaction(UUID.randomUUID().toString(), description, amount.toLong())
+            viewModel.addTransaction(transaction)
 
-                println(transaction)
-                // Mengosongkan input setelah transaksi ditambahkan
+            println(transaction)
+            println("ikz")
+            refreshTrigger++
+//            println(dataList)
+//            dataList = viewModel.getAllTransactions()
+            // Mengosongkan input setelah transaksi ditambahkan
                 description = ""
                 amount = ""
-            } else {
-                // Menampilkan pesan kesalahan jika input tidak valid
-                // (Anda dapat menambahkan logika lain sesuai kebutuhan)
-                // Contoh: showSnackbar("Description and amount are required")
-            }
-        }
-    )
+        } else {
 
-    // Menampilkan daftar transaksi dan total saldo
-//    TransactionList(transactions = viewModel.transactions.collectAsState().value)
-//    TotalBalance(totalBalance = viewModel.totalBalance.collectAsState().value)
+        }
+    }
+
+    CourseSection(
+                transcs = viewModel.transactions.collectAsState().value,
+//                onDelete = viewModel.deleteTransaction(description)
+                transactionActions = object : TransactionActions {
+                    override fun onDelete(transactionId: String) {
+                        viewModel.deleteTransaction(transactionId)
+                    }
+                    override fun onEdit(transaction: Transaction) {
+                        description = transaction.description
+                        amount = transaction.amount.toString()
+                        id = transaction.id
+                        is_edit = !is_edit
+                    }
+                }
+            )
+
+
 }
