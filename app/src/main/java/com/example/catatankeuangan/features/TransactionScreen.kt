@@ -50,7 +50,7 @@ fun TransactionScreen() {
             val transaction = Transaction(id,description,amount.toLong())
             viewModel.editTransaction(transaction)
             println("$id edited")
-            is_edit = !is_edit
+            is_edit = false
             description = ""
             amount = ""
         } else if (description.isNotEmpty() && amount.isNotEmpty()) {
@@ -81,7 +81,7 @@ fun TransactionScreen() {
                         description = transaction.description
                         amount = transaction.amount.toString()
                         id = transaction.id
-                        is_edit = !is_edit
+                        is_edit = true
                     }
                 }
             )
